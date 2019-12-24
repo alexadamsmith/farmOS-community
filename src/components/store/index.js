@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import httpModule from './http';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  modules: {
+    http: httpModule,
+  },
   state: {
-    username: [],
+    username: 'users',
   },
   mutations: {
     updateUserName(state, name) {

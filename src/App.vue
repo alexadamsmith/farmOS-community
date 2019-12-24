@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <CommunityTest msg="FarmOS Community Aggregator"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CommunityTest from './components/CommunityTest.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    CommunityTest
   }
 }
 </script>
