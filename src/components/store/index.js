@@ -10,10 +10,14 @@ const store = new Vuex.Store({
   },
   state: {
     username: 'users',
+    response: '',
   },
   mutations: {
     updateUserName(state, name) {
       state.username = name;
+    },
+    updateResponse(state, response) {
+      state.response = response;
     }
   },
   actions: {

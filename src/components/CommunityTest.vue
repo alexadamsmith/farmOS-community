@@ -19,14 +19,38 @@
       <button
         type="button"
         class="btn btn-success"
-        @click="makeTestRequest()"
+        @click="login()"
+        name="userLogin">
+        Log in!
+      </button>
+    </div>
+
+    <h4>Make test request</h4>
+
+    <select
+    @input="methodSelected = $event.target.value"
+    class="custom-select col-sm-3 ">
+      <option>Select request method</option>
+      <option
+        v-for="(method, i) in requestMethods"
+        v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`"
+        v-bind:value="method">
+        {{ method }}
+      </option>
+  </select>
+
+    <div class="form-item form-group">
+      <button
+        type="button"
+        class="btn btn-success"
+        @click="makeRequest()"
         name="makeTestRequest">
         Make a test request!
       </button>
     </div>
 
     <p>
-      Test request returned: {{ this.testResponse }}
+      Test request returned: {{ this.$store.state.response }}
     </p>
 
   </div>
@@ -40,7 +64,12 @@ export default {
   },
   data() {
     return {
-      testResponse: ''
+      requestMethods: [
+        'users',
+        'farms',
+        'farms/info',
+      ],
+      methodSelected: ''
   }},
   methods: {
     updateUser(key, val) {
@@ -48,18 +77,15 @@ export default {
         this.$store.commit('updateUserName', val)
       }
     },
-    makeTestRequest() {
-      this.$store.dispatch('doGet', '/v1/users')
-        .then((response) => {
-          this.testResponse = JSON.stringify(response);
-          // eslint-disable-next-line
-          console.log(response);
-        })
-        .catch((Error) => {
-          this.testResponse = JSON.stringify(Error);
-          // eslint-disable-next-line
-          console.log(Error);
-        })
+    makeRequest() {
+      if(this.methodSelected !== '') {
+        // eslint-disable-next-line
+        console.log(this.methodSelected);
+        this.$store.dispatch('doGet', this.methodSelected)
+      }
+    },
+    login() {
+      this.$store.dispatch('doGet', {user: 'admin@example.com', password: 'admin'});
     }
   }
 }
