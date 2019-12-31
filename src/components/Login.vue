@@ -1,5 +1,5 @@
 <template>
-  <div class="secondary">
+  <div class="primary">
 
     <div class="form-item form-item-name form-group">
       <label for="name" class="control-label">Username</label>
@@ -36,24 +36,20 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  },
+  name: 'FarmOS_Login',
   data() {
     return {
-      requestMethods: [
-        'users',
-        'farms',
-        'farms/info',
-      ],
       userInput: '',
       passInput: '',
-      methodSelected: '',
   }},
   methods: {
     login() {
-      this.$store.dispatch('doLogin', {user: this.userInput, pass: this.passInput});
+      const payload = {
+        user: this.userInput,
+        pass: this.passInput,
+        router: this.$router
+      };
+      this.$store.dispatch('doLogin', payload);
     }
   }
 }

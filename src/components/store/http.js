@@ -35,6 +35,9 @@ export default {
         // get a token from the aggregator!
         // eslint-disable-next-line
         console.log(credentials);
+
+        const router = credentials.router;
+
         const headers = {
           accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,11 +58,13 @@ export default {
           commit('updateUsername', credentials.user);
           commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
           commit('updateResponse', response.data);
+          router.push({ path: `/main/`})
         })
         .catch((Error) => {
           // Delete after test
           commit('updateUsername', credentials.user);
           commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
+          router.push({ path: `/main/`})
           //
           this.testResponse = JSON.stringify(Error);
           // eslint-disable-next-line

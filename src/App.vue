@@ -1,36 +1,25 @@
 <template>
   <div id="app">
+
     <img alt="FarmOS logo" src="./assets/logo.png">
     <h2>FarmOS Community Aggregator</h2>
 
-    <div
-      class="card"
-      v-if="this.$store.state.token === ''">
-      <div class="card-body">
-        <Login/>
-      </div>
-    </div>
-
-    <div
-      class="card"
-      v-if="this.$store.state.token !== ''">
-      <div class="card-body">
-        <Main msg="Logged in" />
-      </div>
-    </div>
+    <router-view></router-view>
 
   </div>
 </template>
 
 <script>
-import Main from './components/Main.vue'
-import Login from './components/Login.vue'
 
 export default {
   name: 'app',
-  components: {
-    Main,
-    Login
+
+  mounted() {
+    if(this.$store.state.token === '') {
+      this.$router.push({ path: `/login/`})
+    } else {
+      this.$router.push({ path: `/main/`})
+    }
   }
 }
 </script>

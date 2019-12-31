@@ -1,6 +1,7 @@
 <template>
   <div class="primary">
-    <h3>{{ msg }} as: {{ this.$store.state.username }}</h3>
+
+    <h3>Logged in as: {{ this.$store.state.username }}</h3>
 
     <h4>Make test request</h4>
 
@@ -37,9 +38,6 @@
 
 export default {
   name: 'FarmOS_Community_Aggregator',
-  props: {
-    msg: String
-  },
   data() {
     return {
       requestMethods: [
@@ -50,20 +48,12 @@ export default {
       methodSelected: ''
   }},
   methods: {
-    updateUser(key, val) {
-      if (key === 'name') {
-        this.$store.commit('updateUserName', val)
-      }
-    },
     makeRequest() {
       if(this.methodSelected !== '') {
         // eslint-disable-next-line
         console.log(this.methodSelected);
         this.$store.dispatch('doGet', this.methodSelected)
       }
-    },
-    login() {
-      this.$store.dispatch('doGet', {user: 'admin@example.com', password: 'admin'});
     }
   }
 }
