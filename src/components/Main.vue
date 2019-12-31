@@ -1,7 +1,7 @@
 <template>
   <div class="primary">
 
-    <h3>Logged in as: {{ this.$store.state.username }}</h3>
+    <h3>Logged in as: {{ username }}</h3>
 
     <h4>Make test request</h4>
 
@@ -45,7 +45,8 @@ export default {
         'farms',
         'farms/info',
       ],
-      methodSelected: ''
+      methodSelected: '',
+      username: window.localStorage.getItem('username')
   }},
   methods: {
     makeRequest() {

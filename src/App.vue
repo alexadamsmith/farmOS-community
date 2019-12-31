@@ -15,10 +15,12 @@ export default {
   name: 'app',
 
   mounted() {
-    if(this.$store.state.token === '') {
-      this.$router.push({ path: `/login/`})
-    } else {
+    // eslint-disable-next-line
+    console.log("token: "+window.localStorage.getItem('token'));
+    if(window.localStorage.getItem('token')) {
       this.$router.push({ path: `/main/`})
+    } else {
+      this.$router.push({ path: `/login/`})
     }
   }
 }

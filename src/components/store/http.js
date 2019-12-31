@@ -14,7 +14,7 @@ export default {
 
         const headers = {
           accept: 'application/json',
-          Authorization: rootState.token,
+          Authorization: window.localStorage.getItem('token'),
         }
         const request = axios.create({
           baseURL: '/api/v1/',
@@ -55,15 +55,15 @@ export default {
         // TypeError: relativeURL.replace is not a function
         request('login/access-token', { method: 'POST', payload, auth: true })
         .then((response) => {
-          commit('updateUsername', credentials.user);
-          commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
+          window.localStorage.setItem('username', credentials.user);
+          window.localStorage.setItem('token', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
           commit('updateResponse', response.data);
           router.push({ path: `/main/`})
         })
         .catch((Error) => {
           // Delete after test
-          commit('updateUsername', credentials.user);
-          commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
+          window.localStorage.setItem('username', credentials.user);
+          window.localStorage.setItem('token', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
           router.push({ path: `/main/`})
           //
           this.testResponse = JSON.stringify(Error);
