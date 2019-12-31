@@ -9,12 +9,16 @@ const store = new Vuex.Store({
     http: httpModule,
   },
   state: {
-    username: 'users',
+    username: '',
+    token: '',
     response: '',
   },
   mutations: {
-    updateUserName(state, name) {
+    updateUsername(state, name) {
       state.username = name;
+    },
+    updateToken(state, token) {
+      state.token = token;
     },
     updateResponse(state, response) {
       state.response = response;

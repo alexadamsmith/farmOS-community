@@ -1,17 +1,36 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <CommunityTest msg="FarmOS Community Aggregator"/>
+    <img alt="FarmOS logo" src="./assets/logo.png">
+    <h2>FarmOS Community Aggregator</h2>
+
+    <div
+      class="card"
+      v-if="this.$store.state.token === ''">
+      <div class="card-body">
+        <Login/>
+      </div>
+    </div>
+
+    <div
+      class="card"
+      v-if="this.$store.state.token !== ''">
+      <div class="card-body">
+        <Main msg="Logged in" />
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import CommunityTest from './components/CommunityTest.vue'
+import Main from './components/Main.vue'
+import Login from './components/Login.vue'
 
 export default {
   name: 'app',
   components: {
-    CommunityTest
+    Main,
+    Login
   }
 }
 </script>

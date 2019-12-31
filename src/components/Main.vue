@@ -1,29 +1,6 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      Username: {{ this.$store.state.username }}
-    </p>
-
-    <div class="form-item form-item-name form-group">
-      <label for="name" class="control-label">Name</label>
-      <input
-      @input="updateUser('name', $event.target.value)"
-      placeholder="Enter username"
-      type="text"
-      class="form-control"
-      autofocus>
-    </div>
-
-    <div class="form-item form-group">
-      <button
-        type="button"
-        class="btn btn-success"
-        @click="login()"
-        name="userLogin">
-        Log in!
-      </button>
-    </div>
+  <div class="primary">
+    <h3>{{ msg }} as: {{ this.$store.state.username }}</h3>
 
     <h4>Make test request</h4>
 
@@ -57,8 +34,9 @@
 </template>
 
 <script>
+
 export default {
-  name: 'HelloWorld',
+  name: 'FarmOS_Community_Aggregator',
   props: {
     msg: String
   },

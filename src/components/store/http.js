@@ -8,9 +8,13 @@ export default {
         // TODO
         // figure out why farm/info returns the following:
         // {"detail":[{"loc":["path","farm_id"],"msg":"value is not a valid integer","type":"type_error.integer"}]}
+
+        // eslint-disable-next-line
+        console.log(method);
+
         const headers = {
           accept: 'application/json',
-          Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg',
+          Authorization: rootState.token,
         }
         const request = axios.create({
           baseURL: '/api/v1/',
@@ -29,6 +33,8 @@ export default {
       // eslint-disable-next-line
       doLogin({ commit, rootState }, credentials) {
         // get a token from the aggregator!
+        // eslint-disable-next-line
+        console.log(credentials);
         const headers = {
           accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -36,17 +42,25 @@ export default {
         const payload = {
           form_id: 'user_login',
           name: credentials.user,
-          pass: credentials.password,
+          pass: credentials.pass,
         };
         const request = axios.create({
           baseURL: '/api/v1/',
           headers: headers,
-        })
+        });
+        // Currently generates error :
+        // TypeError: relativeURL.replace is not a function
         request('login/access-token', { method: 'POST', payload, auth: true })
         .then((response) => {
+          commit('updateUsername', credentials.user);
+          commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
           commit('updateResponse', response.data);
         })
         .catch((Error) => {
+          // Delete after test
+          commit('updateUsername', credentials.user);
+          commit('updateToken', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsInNjb3BlcyI6WyJmYXJtOnJlYWQiLCJmYXJtLmxvZ3MiLCJmYXJtLmluZm8iLCJmYXJtLmFzc2V0cyIsImZhcm0udGVybXMiLCJmYXJtLmFyZWFzIiwiZmFybTphdXRob3JpemUiXSwiZXhwIjoxNTc4MTY3ODQ0fQ.HGfTTfOwm6MmZk2_KiAOCt1UbOEjAr1D5aR2zECnmTg');
+          //
           this.testResponse = JSON.stringify(Error);
           // eslint-disable-next-line
           console.log(Error);
