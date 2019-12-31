@@ -41,9 +41,9 @@ export default {
   data() {
     return {
       requestMethods: [
-        'users',
-        'farms',
-        'farms/info',
+        'users/',
+        'farms/',
+        'farms/info/',
       ],
       methodSelected: '',
       username: window.localStorage.getItem('username')
