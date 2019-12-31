@@ -38,6 +38,7 @@ export default {
         const headers = {
           accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: 'Basic Og==',
         };
         const request = axios.create({
           baseURL: '/api/v1/',
@@ -46,7 +47,7 @@ export default {
 
         function formatCredentials(username, password) {
           let userParsed = username.replace('@', '%40');
-          return 'grant_type=&username='+userParsed+'&password='+password+'&scope=&client_id=&client_secret='
+          return 'grant_type=password&scope=farm%3Acreate+farm%3Aread+farm%3Aupdate+farm%3Adelete+farm%3Aauthorize+farm.info+farm.logs+farm.assets+farm.terms+farm.areas&username='+userParsed+'&password='+password;
         }
 
         request.post('login/access-token', formatCredentials(credentials.user, credentials.pass) )

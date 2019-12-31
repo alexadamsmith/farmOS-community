@@ -1,21 +1,21 @@
 <template>
   <div class="primary">
 
-    <h3>Logged in as: {{ username }}</h3>
+    <h4>Logged in as: {{ username }}</h4>
 
     <h4>Make test request</h4>
 
+    <!-- I need to clean this up! -->
     <select
     @input="methodSelected = $event.target.value"
     class="custom-select col-sm-3 ">
-      <option>Select request method</option>
       <option
         v-for="(method, i) in requestMethods"
         v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`"
-        v-bind:value="method">
+        :value="method">
         {{ method }}
       </option>
-  </select>
+    </select>
 
     <div class="form-item form-group">
       <button
@@ -27,20 +27,27 @@
       </button>
     </div>
 
-    <p>
-      Test request returned: {{ this.$store.state.response }}
-    </p>
+    <div v-if="this.$store.state.response !== null">
+      <DisplayResponse
+        :data="this.$store.state.response"
+        />
+    </div>
 
   </div>
 </template>
 
 <script>
+import DisplayResponse from '@/components/DisplayResponse';
 
 export default {
   name: 'FarmOS_Community_Aggregator',
+  components: {
+    DisplayResponse,
+  },
   data() {
     return {
       requestMethods: [
+        'Select request method',
         'users/',
         'farms/',
         'farms/info/',
@@ -50,9 +57,10 @@ export default {
   }},
   methods: {
     makeRequest() {
-      if(this.methodSelected !== '') {
+      if(this.methodSelected !== '' && this.methodSelected !== 'Select request method') {
         // eslint-disable-next-line
         console.log(this.methodSelected);
+        this.$store.commit('updateResponse', '');
         this.$store.dispatch('doGet', this.methodSelected)
       }
     }

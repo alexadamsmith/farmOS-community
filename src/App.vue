@@ -2,7 +2,7 @@
   <div id="app">
 
     <img alt="FarmOS logo" src="./assets/logo.png">
-    <h2>FarmOS Community Aggregator</h2>
+    <h3>FarmOS Community Aggregator</h3>
 
     <router-view></router-view>
 

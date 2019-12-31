@@ -9,7 +9,7 @@ const store = new Vuex.Store({
     http: httpModule,
   },
   state: {
-    response: '',
+    response: null,
   },
   mutations: {
     updateResponse(state, response) {
