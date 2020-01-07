@@ -53,6 +53,16 @@ export default {
           displayText.push("ID: "+farm);
         }
       }
+      if (this.method === 'farms/logs/') {
+        for (const farm in this.data) {
+          displayText.push("Farm ID: "+farm);
+          this.data[farm].forEach(i => {
+            displayText.push("Log ID: "+i.id);
+            displayText.push("Log name: "+i.name);
+            displayText.push("URL: "+i.url);
+          });
+        }
+      }
       return displayText
       }
     }

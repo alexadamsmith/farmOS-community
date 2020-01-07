@@ -54,6 +54,7 @@ export default {
         'users/',
         'farms/',
         'farms/info/',
+        'farms/logs/',
       ],
       methodSelected: '',
       username: window.localStorage.getItem('username')
