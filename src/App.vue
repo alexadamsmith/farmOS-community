@@ -4,7 +4,8 @@
     <img alt="FarmOS logo" src="./assets/logo.png">
     <h3>FarmOS Community Aggregator</h3>
 
-    <router-view></router-view>
+    <!-- Can pass props to the router, as :data='logs' -->
+    <router-view/>
 
   </div>
 </template>
@@ -15,8 +16,6 @@ export default {
   name: 'app',
 
   mounted() {
-    // eslint-disable-next-line
-    console.log("token: "+window.localStorage.getItem('token'));
     if(window.localStorage.getItem('token')) {
       this.$router.push({ path: `/main/`})
     } else {

@@ -10,10 +10,14 @@ const store = new Vuex.Store({
   },
   state: {
     response: null,
+    requestMethod: null
   },
   mutations: {
     updateResponse(state, response) {
       state.response = response;
+    },
+    updateRequestMethod(state, method) {
+      state.requestMethod = method;
     }
   },
   actions: {

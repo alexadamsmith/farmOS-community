@@ -6,8 +6,10 @@
       v-if="this.$store.state.response !== ''">
       <div class="card-body">
         <h4 class="card-title">Test request returned:</h4>
-        <p class="card-text">
-          {{ this.pareseData() }}
+        <p
+          v-for="(line, i) in this.parseData()"
+          v-bind:key="i">
+          {{ line }}
         </p>
       </div>
     </div>
@@ -19,15 +21,39 @@
 
 export default {
   props: {
-    data: [Object, Array]
+    data: [Object, Array, String],
+    method: String,
   },
   name: 'Display_Response',
   data() {
     return {
   }},
   methods: {
-    pareseData() {
-      return this.data;
+    parseData() {
+      let displayText = [];
+      if (this.method === 'users/') {
+        this.data.forEach(i => {
+          displayText.push("Email: "+i.email);
+          displayText.push("Name: "+i.full_name);
+          displayText.push("ID: "+i.id);
+        });
+      }
+      if (this.method === 'farms/') {
+        this.data.forEach(i => {
+          displayText.push("Farm name (aggregator): "+i.farm_name);
+          displayText.push("URL: "+i.url);
+          displayText.push("ID: "+i.id);
+        });
+      }
+      if (this.method === 'farms/info/') {
+        for (const farm in this.data) {
+          displayText.push("Farm name (farmOS server): "+this.data[farm].info.name);
+          displayText.push("URL: "+this.data[farm].info.url);
+          displayText.push("User: "+this.data[farm].info.user.name);
+          displayText.push("ID: "+farm);
+        }
+      }
+      return displayText
       }
     }
 }

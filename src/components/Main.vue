@@ -11,11 +11,13 @@
     class="custom-select col-sm-3 ">
       <option
         v-for="(method, i) in requestMethods"
-        v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`"
+        v-bind:key="i"
         :value="method">
         {{ method }}
       </option>
     </select>
+    <!-- requestMethods.indexOf('method') -->
+    <!-- v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`" -->
 
     <div class="form-item form-group">
       <button
@@ -30,6 +32,7 @@
     <div v-if="this.$store.state.response !== null">
       <DisplayResponse
         :data="this.$store.state.response"
+        :method="this.$store.state.requestMethod"
         />
     </div>
 
@@ -58,8 +61,6 @@ export default {
   methods: {
     makeRequest() {
       if(this.methodSelected !== '' && this.methodSelected !== 'Select request method') {
-        // eslint-disable-next-line
-        console.log(this.methodSelected);
         this.$store.commit('updateResponse', '');
         this.$store.dispatch('doGet', this.methodSelected)
       }
