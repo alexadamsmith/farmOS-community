@@ -28,6 +28,13 @@
         Make a test request!
       </button>
     </div>
+  <!--
+    <Map
+      id="map"
+    />
+-->
+
+
 
     <div v-if="this.$store.state.response !== null">
       <DisplayResponse
@@ -41,6 +48,7 @@
 
 <script>
 import DisplayResponse from '@/components/DisplayResponse';
+// Consider importing { mapState } to ease access to vars in store
 
 export default {
   name: 'FarmOS_Community_Aggregator',
@@ -54,7 +62,7 @@ export default {
         'users/',
         'farms/',
         'farms/info/',
-        'farms/logs/',
+        'farms/areas/',
       ],
       methodSelected: '',
       username: window.localStorage.getItem('username')
@@ -66,7 +74,7 @@ export default {
         this.$store.dispatch('doGet', this.methodSelected)
       }
     }
-  }
+  },
 }
 </script>
 

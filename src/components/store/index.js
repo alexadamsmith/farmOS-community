@@ -10,7 +10,9 @@ const store = new Vuex.Store({
   },
   state: {
     response: null,
-    requestMethod: null
+    requestMethod: null,
+    mapboxAPIKey: null,
+    geometry: 'POINT (-75.16525712985431 39.95333070721313)'
   },
   mutations: {
     updateResponse(state, response) {

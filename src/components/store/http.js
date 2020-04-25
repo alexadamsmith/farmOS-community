@@ -46,6 +46,12 @@ export default {
           return 'grant_type=password&scope=farm%3Acreate+farm%3Aread+farm%3Aupdate+farm%3Adelete+farm%3Aauthorize+farm.info+farm.logs+farm.assets+farm.terms+farm.areas&username='+userParsed+'&password='+password;
         }
 
+        /*
+        TODO:
+        If the app has a token but receives a 401 (unauthorized) from the server,
+        clear the token and redirect to the login page.
+        */
+
         request.post('login/access-token', formatCredentials(credentials.user, credentials.pass) )
           .then((response) => {
             window.localStorage.setItem('username', credentials.user);

@@ -1,6 +1,16 @@
 <template>
   <div class="primary">
-
+    <div v-if="this.method === 'farms/areas/'">
+    <p>Displaying centroids</p>
+    <Map
+      id="map"
+      :overrideStyles="{ height: '60vw' }"
+      :drawing="false"
+      :options="{
+        controls: (defs) => defs.filter(def => def.constructor.name !== 'FullScreen')
+      }"
+      :wkt="mapLayers" />
+    </div>
     <div
       class="card"
       v-if="this.$store.state.response !== ''">
@@ -13,21 +23,48 @@
         </p>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-
+import Map from '@/components/Map';
 export default {
   props: {
     data: [Object, Array, String],
     method: String,
   },
   name: 'Display_Response',
+  components: {
+    Map
+  },
   data() {
     return {
   }},
+  computed: {
+    mapLayers() {
+      // eslint-disable-next-line
+      let centroid = null;
+      for (const farm in this.data) {
+        this.data[farm].forEach(i => {
+          // eslint-disable-next-line
+          console.log(i);
+          if (i.name === "Centroid") {
+            centroid = i.geofield[0].geom
+          }
+        })
+      }
+
+      const farms = {
+        title: 'farms',
+        wkt: centroid,
+        color: 'orange',
+        visible: true,
+        weight: 0,
+        canEdit: false,
+      };
+      return [farms];
+    },
+  },
   methods: {
     parseData() {
       let displayText = [];
@@ -47,19 +84,18 @@ export default {
       }
       if (this.method === 'farms/info/') {
         for (const farm in this.data) {
-          displayText.push("Farm name (farmOS server): "+this.data[farm].info.name);
-          displayText.push("URL: "+this.data[farm].info.url);
-          displayText.push("User: "+this.data[farm].info.user.name);
+          displayText.push("Farm name (server): "+this.data[farm].name);
+          displayText.push("URL: "+this.data[farm].url);
+          displayText.push("API Version: "+this.data[farm].api_version);
           displayText.push("ID: "+farm);
         }
       }
-      if (this.method === 'farms/logs/') {
+      if (this.method === 'farms/areas/') {
         for (const farm in this.data) {
           displayText.push("Farm ID: "+farm);
           this.data[farm].forEach(i => {
-            displayText.push("Log ID: "+i.id);
-            displayText.push("Log name: "+i.name);
-            displayText.push("URL: "+i.url);
+            displayText.push("Area ID: "+i.tid);
+            displayText.push("Area name: "+i.name);
           });
         }
       }
