@@ -10,17 +10,23 @@ const store = new Vuex.Store({
   },
   state: {
     response: null,
-    requestMethod: null,
     mapboxAPIKey: null,
-    geometry: 'POINT (-75.16525712985431 39.95333070721313)'
+    farms: {},
+  },
+  getters: {
+    // mapState is creating simple getters for all state properties
+    // I explicitly declare additional getters here
   },
   mutations: {
     updateResponse(state, response) {
       state.response = response;
     },
-    updateRequestMethod(state, method) {
-      state.requestMethod = method;
-    }
+    updateFarms(state, farms) {
+      state.farms = farms;
+    },
+    updateFarmAreas(state, data) {
+      state.farms[data.farm].areas = data.areas
+    },
   },
   actions: {
 

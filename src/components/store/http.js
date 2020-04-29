@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-
 export default {
+
     actions: {
       // eslint-disable-next-line
-      doGet({ commit, rootState }, method) {
+      doGet({ commit, dispatch, rootState }, method) {
 
         const headers = {
           accept: 'application/json',
@@ -16,14 +16,30 @@ export default {
         })
         request.get(method)
         .then((response) => {
-          commit('updateRequestMethod', method)
-          commit('updateResponse', response.data);
+          // commit('updateRequestMethod', method)
+          commit('updateResponse', method);
+          dispatch('storeResponse', {method: method, response: response.data})
         })
         .catch((Error) => {
           this.testResponse = JSON.stringify(Error);
           // eslint-disable-next-line
           console.log(Error);
         })
+      },
+
+      storeResponse({ commit }, response) {
+        if (response.method === "farms/info/") {
+          commit('updateFarms', response.response);
+        }
+
+        if (response.method === "farms/areas/") {
+          for (const farm in response.response) {
+            commit('updateFarmAreas', {
+              farm: farm,
+              areas: response.response[farm],
+            });
+          }
+        }
       },
       // eslint-disable-next-line
       doLogin({ commit, rootState }, credentials) {

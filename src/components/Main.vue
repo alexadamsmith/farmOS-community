@@ -5,7 +5,7 @@
 
     <h4>Make test request</h4>
 
-    <!-- I need to clean this up! -->
+    <!--
     <select
     @input="methodSelected = $event.target.value"
     class="custom-select col-sm-3 ">
@@ -16,63 +16,62 @@
         {{ method }}
       </option>
     </select>
+    -->
     <!-- requestMethods.indexOf('method') -->
     <!-- v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`" -->
-
+    <!--
     <div class="form-item form-group">
       <button
         type="button"
         class="btn btn-success"
-        @click="makeRequest()"
+        @click="getFarmInfo()"
         name="makeTestRequest">
-        Make a test request!
+        Get Farm Info!
       </button>
     </div>
-  <!--
-    <Map
-      id="map"
-    />
--->
+    -->
 
-
-
-    <div v-if="this.$store.state.response !== null">
-      <DisplayResponse
-        :data="this.$store.state.response"
-        :method="this.$store.state.requestMethod"
-        />
+    <div v-if="this.response === 'farms/areas/'">
+      <DisplayFarms/>
     </div>
 
   </div>
 </template>
 
 <script>
-import DisplayResponse from '@/components/DisplayResponse';
-// Consider importing { mapState } to ease access to vars in store
+import { mapState } from 'vuex';
+import DisplayFarms from '@/components/DisplayFarms';
 
 export default {
   name: 'FarmOS_Community_Aggregator',
   components: {
-    DisplayResponse,
+    DisplayFarms,
   },
   data() {
     return {
-      requestMethods: [
-        'Select request method',
-        'users/',
-        'farms/',
-        'farms/info/',
-        'farms/areas/',
-      ],
-      methodSelected: '',
-      username: window.localStorage.getItem('username')
+    username: window.localStorage.getItem('username')
   }},
+  computed: {
+    ...mapState([
+      'response',
+    ]),
+  },
+  mounted() {
+    this.getFarmInfo();
+  },
   methods: {
-    makeRequest() {
-      if(this.methodSelected !== '' && this.methodSelected !== 'Select request method') {
-        this.$store.commit('updateResponse', '');
-        this.$store.dispatch('doGet', this.methodSelected)
-      }
+    /*
+    Available request methods:
+    'users/',
+    'farms/',
+    'farms/info/',
+    'farms/areas/',
+    */
+    getFarmInfo() {
+      this.$store.commit('updateResponse', '');
+      this.$store.dispatch('doGet', 'farms/info/').then(
+        this.$store.dispatch('doGet', 'farms/areas/')
+      )
     }
   },
 }
