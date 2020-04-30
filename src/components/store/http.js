@@ -3,9 +3,7 @@ import axios from 'axios';
 export default {
 
     actions: {
-      // eslint-disable-next-line
-      doGet({ commit, dispatch, rootState }, method) {
-
+      doGet({ commit, dispatch}, method) {
         const headers = {
           accept: 'application/json',
           Authorization: window.localStorage.getItem('token'),
@@ -22,8 +20,7 @@ export default {
         })
         .catch((Error) => {
           this.testResponse = JSON.stringify(Error);
-          // eslint-disable-next-line
-          console.log(Error);
+          console.log(Error); // eslint-disable-line no-console
         })
       },
 
@@ -41,10 +38,9 @@ export default {
           }
         }
       },
-      // eslint-disable-next-line
-      doLogin({ commit, rootState }, credentials) {
-        // get a token from the aggregator!
 
+      doLogin({}, credentials) { // eslint-disable-line no-empty-pattern
+        // get a token from the aggregator!
         const router = credentials.router;
 
         const headers = {
@@ -77,8 +73,7 @@ export default {
           .catch((Error) => {
             // TODO Display an error message
             this.testResponse = JSON.stringify(Error);
-            // eslint-disable-next-line
-            console.log(Error);
+            console.log(Error); // eslint-disable-line no-console
           })
       }
     }

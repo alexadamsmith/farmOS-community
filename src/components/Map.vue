@@ -10,23 +10,6 @@
 import { mapState } from 'vuex';
 
 export default {
-  /*
-  name: 'Map',
-  data() {
-    return {
-      map: {},
-    };
-  },
-  props: {
-    id: String,
-  },
-  computed: mapState({
-    mapboxAPIKey: state => state.mapboxAPIKey,
-  }),
-  mounted() {
-    this.map = window.farmOS.map.create(this.id)
-  }
-  */
 
   name: 'Map',
   data() {
@@ -87,7 +70,8 @@ export default {
         && wktElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
         this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
         if (wktElement.weight === Math.min(...layerWeights)) {
-          this.map.zoomToLayer(this.layers[wktElement.title]);
+          this.map.zoomToVectors();
+          //this.map.zoomToLayer(this.layers[wktElement.title]);
         }
         hasLayers = true;
       }
@@ -96,12 +80,14 @@ export default {
           && wktElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
           if (wktElement.weight === Math.min(...layerWeights) && wktElement.canEdit) {
             this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
-            this.map.zoomToLayer(this.layers[wktElement.title]);
+            this.map.zoomToVectors();
+            //this.map.zoomToLayer(this.layers[wktElement.title]);
             this.map.addBehavior('edit', { layer: this.layers[wktElement.title] });
             this.map.addBehavior('measure', { layer: this.layers[wktElement.title] });
           } else if (wktElement.weight === Math.min(...layerWeights)) {
             this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
-            this.map.zoomToLayer(this.layers[wktElement.title]);
+            this.map.zoomToVectors();
+            //this.map.zoomToLayer(this.layers[wktElement.title]);
           } else {
             this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
           }
@@ -158,7 +144,8 @@ export default {
             && newElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
               this.layers[newElement.title] = this.map.addLayer('wkt', newElement);
               if (newElement.weight === Math.min(...layerWeights)) {
-                this.map.zoomToLayer(this.layers[newElement.title]);
+                this.map.zoomToVectors();
+                //this.map.zoomToLayer(this.layers[newElement.title]);
                 hasLayers = true;
               }
             }

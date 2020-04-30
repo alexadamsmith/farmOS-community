@@ -3,7 +3,7 @@
 
     <h4>Logged in as: {{ username }}</h4>
 
-    <h4>Make test request</h4>
+    <h4>Centroids of aggregated farms:</h4>
 
     <!--
     <select

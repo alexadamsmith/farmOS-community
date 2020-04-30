@@ -1,10 +1,8 @@
 <template>
   <div class="primary">
     <div>
-
-    <p>Displaying centroids</p>
     <Map
-      id="map"
+      id='map'
       :overrideStyles="{ height: '60vw' }"
       :drawing="false"
       :options="{
@@ -12,12 +10,12 @@
       }"
       :wkt="mapLayers" />
 
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Farm names:</h4>
+      <div class='card'>
+        <div class='card-body'>
+          <h4 class='card-title'>Areas displayed:</h4>
           <p
-            v-for="(line, i) in this.parseData()"
-            v-bind:key="i">
+            v-for='(line, i) in this.parseData()'
+            v-bind:key='i'>
             {{ line }}
           </p>
         </div>
@@ -31,10 +29,6 @@
 import { mapState } from 'vuex';
 import Map from '@/components/Map';
 export default {
-  props: {
-  //  data: [Object, Array, String],
-  //  method: String,
-  },
   name: 'Display_Farms',
   components: {
     Map
@@ -43,7 +37,6 @@ export default {
     return {
   }},
   computed: {
-    // get specified values from state using implicit getters
     ...mapState([
       'response',
       'farms',
@@ -51,28 +44,24 @@ export default {
     mapLayers() {
       /*
        TODO:
-       - Add each centroid as a separate layer and zoom to LAYERS
+       - Test with additional aggregated farms
+       - Display farm info on mouseover
+       - Route to farm metrics on click
       */
-
-      // eslint-disable-next-line
-      let centroid = null;
-      for (const farm in this.farms) {
-        this.farms[farm].areas.forEach(i => {
-          if (i.name === "Centroid") {
-            centroid = i.geofield[0].geom
+      return Object.keys(this.farms).map(farm => {
+        return this.farms[farm].areas.map(i => {
+          if (i.name.includes("Centroid")) {
+            return {
+              title: this.farms[farm].name+' '+i.name,
+              wkt: i.geofield[0].geom,
+              color: 'orange',
+              visible: true,
+              weight: 0,
+              canEdit: false,
+            };
           }
-        })
-      }
-
-      const farmCenters = {
-        title: 'Farm Centers',
-        wkt: centroid,
-        color: 'orange',
-        visible: true,
-        weight: 0,
-        canEdit: false,
-      };
-      return [farmCenters];
+        }).filter(x => x)
+      }).flat()
     },
   },
   mounted() {
@@ -80,16 +69,13 @@ export default {
   },
   methods: {
     parseData() {
-      let displayText = [];
-      for (const farm in this.farms) {
-        displayText.push("Farm name: "+this.farms[farm].name);
-        displayText.push("Farm ID: "+farm);
-        this.farms[farm].areas.forEach(i => {
-          displayText.push("Area ID: "+i.tid);
-          displayText.push("Area name: "+i.name);
-        });
-      }
-      return displayText
+      return Object.keys(this.farms).map(farm => {
+        return this.farms[farm].areas.map(i => {
+          if (i.name.includes("Centroid")) {
+            return 'Farm '+farm+': '+this.farms[farm].name+', Area '+i.tid+': '+i.name;
+          }
+        }).filter(x => x)
+      }).flat()
       }
     }
 }
