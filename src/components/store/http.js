@@ -28,13 +28,14 @@ export default {
         if (response.method === "farms/info/") {
           commit('updateFarms', response.response);
         }
-
         if (response.method === "farms/areas/") {
           for (const farm in response.response) {
-            commit('updateFarmAreas', {
-              farm: farm,
-              areas: response.response[farm],
-            });
+            if (response.response[farm].length > 0) {
+              commit('updateFarmAreas', {
+                farm: farm,
+                areas: response.response[farm],
+              });
+            }
           }
         }
       },

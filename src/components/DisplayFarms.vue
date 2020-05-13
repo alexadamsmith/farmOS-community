@@ -49,19 +49,20 @@ export default {
        - Route to farm metrics on click
       */
       return Object.keys(this.farms).map(farm => {
-        return this.farms[farm].areas.map(i => {
-          if (i.name.includes("Centroid")) {
-            return {
-              title: this.farms[farm].name+' '+i.name,
-              wkt: i.geofield[0].geom,
-              color: 'orange',
-              visible: true,
-              weight: 0,
-              canEdit: false,
-            };
-          }
-        }).filter(x => x)
-      }).flat()
+        return (this.farms[farm] && this.farms[farm].areas)
+          ? this.farms[farm].areas.map(i => {
+            return i.name.includes("Centroid")
+              ? {
+                title: this.farms[farm].name+' '+i.name,
+                wkt: i.geofield[0].geom,
+                color: 'orange',
+                visible: true,
+                weight: 0,
+                canEdit: false, }
+              : null
+            }).filter(x => x)
+          : null
+      }).filter(x => x).flat();
     },
   },
   mounted() {
@@ -70,14 +71,16 @@ export default {
   methods: {
     parseData() {
       return Object.keys(this.farms).map(farm => {
-        return this.farms[farm].areas.map(i => {
-          if (i.name.includes("Centroid")) {
-            return 'Farm '+farm+': '+this.farms[farm].name+', Area '+i.tid+': '+i.name;
-          }
-        }).filter(x => x)
-      }).flat()
-      }
+        return (this.farms[farm] && this.farms[farm].areas)
+          ? this.farms[farm].areas.map(i => {
+            return i.name.includes("Centroid")
+              ? 'Farm '+farm+': '+this.farms[farm].name+', Area '+i.tid+': '+i.name
+              : null
+            }).filter(x => x)
+          : null
+      }).filter(x => x).flat()
     }
+  }
 }
 
 </script>
