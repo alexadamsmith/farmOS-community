@@ -1,6 +1,8 @@
 <template>
   <div class="primary">
     <div>
+      <!-- interactions: 'select' -->
+      <!-- .concat(['SelectFeature']) -->
     <Map
       id='map'
       :overrideStyles="{ height: '60vw' }"
@@ -58,7 +60,8 @@ export default {
                 color: 'orange',
                 visible: true,
                 weight: 0,
-                canEdit: false, }
+                canEdit: false,
+                attribution: this.farms[farm].name+' '+i.name}
               : null
             }).filter(x => x)
           : null

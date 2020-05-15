@@ -49,7 +49,8 @@ export default {
           && typeof e.color === 'string'
           && (!e.visible || typeof e.visible === 'boolean')
           && typeof e.weight === 'number'
-          && typeof e.canEdit === 'boolean'),
+          && typeof e.canEdit === 'boolean'
+          && typeof e.attribution === 'string'),
     },
   },
   computed: mapState({
@@ -57,58 +58,42 @@ export default {
   }),
   mounted() {
     this.map = window.farmOS.map.create(this.id, this.options);
-// eslint-disable-next-line
-    let hasLayers = false;
+
+    //let hasLayers = false; // eslint-disable-line no-unused-vars
     // De-weights layers without geometries
+    /*
     const layerWeights = this.wkt.map(e => (e.wkt
       && e.wkt !== 'GEOMETRYCOLLECTION EMPTY'
       ? e.weight : 99));
+      */
     this.wkt.forEach((wktElement) => {
       // Zoom to the layer if it has the lowest weight
-      if (!this.drawing
-        && wktElement.wkt
+      if (wktElement.wkt
         && wktElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
         this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
+        /*
         if (wktElement.weight === Math.min(...layerWeights)) {
-          this.map.zoomToVectors();
-          //this.map.zoomToLayer(this.layers[wktElement.title]);
+          this.map.zoomToLayer(this.layers[wktElement.title]);
         }
-        hasLayers = true;
-      }
-      if (this.drawing) {
-        if (wktElement.wkt
-          && wktElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
-          if (wktElement.weight === Math.min(...layerWeights) && wktElement.canEdit) {
-            this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
-            this.map.zoomToVectors();
-            //this.map.zoomToLayer(this.layers[wktElement.title]);
-            this.map.addBehavior('edit', { layer: this.layers[wktElement.title] });
-            this.map.addBehavior('measure', { layer: this.layers[wktElement.title] });
-          } else if (wktElement.weight === Math.min(...layerWeights)) {
-            this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
-            this.map.zoomToVectors();
-            //this.map.zoomToLayer(this.layers[wktElement.title]);
-          } else {
-            this.layers[wktElement.title] = this.map.addLayer('wkt', wktElement);
-          }
-          hasLayers = true;
-        }
+        */
+        //hasLayers = true;
       }
     });
-    if (this.drawing && this.map.edit) {
-      this.map.edit.wktOn('drawend', (wkt) => {
-        this.$emit('update-wkt', wkt);
-      });
-      this.map.edit.wktOn('modifyend', (wkt) => {
-        this.$emit('update-wkt', wkt);
-      });
-      this.map.edit.wktOn('translateend', (wkt) => {
-        this.$emit('update-wkt', wkt);
-      });
-      this.map.edit.wktOn('delete', (wkt) => {
-        this.$emit('update-wkt', wkt);
-      });
-    }
+    this.map.zoomToVectors();
+
+    // TODO:
+    // Add link in popup to farm info view
+    var popup = this.map.addPopup(event => { // eslint-disable-line no-unused-vars
+      var layer = this.map.map.forEachFeatureAtPixel(event.pixel, function(feature, layer) { return layer; }); // eslint-disable-line no-unused-vars
+      console.log(layer); // eslint-disable-line no-console
+      return '<div><h2>Farm</h2><p>' + layer.values_.title + '</p></div>';
+    })
+    /*
+    popup.on('farmOS-map.popup', function (event) {
+      console.log('Event: farmOS-map.popup');
+    });
+    */
+
     if (this.mapboxAPIKey) {
       const mapboxOpts = {
         title: 'MapBox Satellite',
@@ -120,6 +105,7 @@ export default {
       this.layers.mapbox = this.map.addLayer('xyz', mapboxOpts);
     }
   },
+
   beforeDestroy() {
     window.farmOS.map.destroy(this.id);
     this.map = null;
@@ -128,32 +114,34 @@ export default {
     wkt: {
       handler(newWKT) {
         // TODO: Figure out why this is triggering twice when a new area is added.
-        if (!this.drawing) {
-          let hasLayers = false;
-          // Preferentially weights layers with geometries
-          const layerWeights = newWKT.map(e => (e.wkt
-            && e.wkt !== 'GEOMETRYCOLLECTION EMPTY'
-            ? e.weight : 99));
-          newWKT.forEach((newElement) => {
-            // Zoom to the layer if it has the lowest weight
-            if (this.layers[newElement.title]) {
-              this.map.map.removeLayer(this.layers[newElement.title]);
-              this.layers[newElement.title] = null;
-            }
-            if (newElement.wkt
-            && newElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
-              this.layers[newElement.title] = this.map.addLayer('wkt', newElement);
-              if (newElement.weight === Math.min(...layerWeights)) {
-                this.map.zoomToVectors();
-                //this.map.zoomToLayer(this.layers[newElement.title]);
-                hasLayers = true;
-              }
-            }
-          });
-          if (!hasLayers) {
-            this.map.zoomToVectors();
+        //let hasLayers = false;
+        // Preferentially weights layers with geometries
+        /*
+        const layerWeights = newWKT.map(e => (e.wkt
+          && e.wkt !== 'GEOMETRYCOLLECTION EMPTY'
+          ? e.weight : 99));
+          */
+        newWKT.forEach((newElement) => {
+          // Zoom to the layer if it has the lowest weight
+          if (this.layers[newElement.title]) {
+            this.map.map.removeLayer(this.layers[newElement.title]);
+            this.layers[newElement.title] = null;
           }
-        }
+          if (newElement.wkt
+          && newElement.wkt !== 'GEOMETRYCOLLECTION EMPTY') {
+            this.layers[newElement.title] = this.map.addLayer('wkt', newElement);
+            /*
+            if (newElement.weight === Math.min(...layerWeights)) {
+              this.map.zoomToVectors();
+              //this.map.zoomToLayer(this.layers[newElement.title]);
+              hasLayers = true;
+            }
+            */
+          }
+        });
+        //if (!hasLayers) {
+          this.map.zoomToVectors();
+        //}
       },
       deep: true,
     },
