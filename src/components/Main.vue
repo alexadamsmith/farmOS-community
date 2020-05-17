@@ -1,10 +1,18 @@
 <template>
   <div class="primary">
 
-    <h4>Click on the farms below to see information:</h4>
+    <FarmInfo/>
 
     <div v-if="this.response === 'farms/areas/'">
-      <DisplayFarms/>
+      <Map
+        id='map'
+        :overrideStyles="{ height: '60vw' }"
+        :drawing="false"
+        :options="{
+          controls: (defs) => defs.filter(def => def.constructor.name !== 'FullScreen')
+        }"
+        :wkt="mapLayers" />
+
     </div>
 
   </div>
@@ -12,12 +20,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import DisplayFarms from '@/components/DisplayFarms';
+import Map from '@/components/Map';
+import FarmInfo from '@/components/FarmInfo';
 
 export default {
   name: 'FarmOS_Community_Aggregator',
   components: {
-    DisplayFarms,
+    Map,
+    FarmInfo,
   },
   data() {
     return {
@@ -26,7 +36,28 @@ export default {
   computed: {
     ...mapState([
       'response',
+      'farms',
     ]),
+    mapLayers() {
+      /*
+       TODO:
+       - Route to farm info / metrics on click
+      */
+      return Object.keys(this.farms).map(farm => {
+        return (this.farms[farm] && this.farms[farm].centroid)
+          ? {
+            title: farm,
+            wkt: this.farms[farm].centroid.geofield[0].geom,
+            color: 'orange',
+            visible: true,
+            weight: 0,
+            canEdit: false,}
+            // params: { ID: farm }}
+            // id: farm}
+            // attribution: this.farms[farm].name+' '+i.name}
+          : null
+      }).filter(x => x);
+    },
   },
   mounted() {
     this.getFarmInfo();

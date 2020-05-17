@@ -1,10 +1,9 @@
 <template>
   <div class="primary">
     <div>
-
       <div class='card'>
         <div class='card-body'>
-          <h4 class='card-title'>{{  }}</h4>
+          <h4 class='card-title'>{{ title }}</h4>
           <p
             v-for='(line, i) in this.getFarmInfo()'
             v-bind:key='i'>
@@ -25,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: null,
+      title: 'Click on a farm below to see info!',
   }},
   computed: {
     ...mapState([
