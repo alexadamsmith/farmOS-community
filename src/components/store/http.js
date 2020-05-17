@@ -40,7 +40,7 @@ export default {
         }
       },
 
-      doLogin({}, credentials) { // eslint-disable-line no-empty-pattern
+      doLogin({ commit }, credentials) { // eslint-disable-line no-empty-pattern
         // get a token from the aggregator!
         const router = credentials.router;
 
@@ -67,7 +67,8 @@ export default {
 
         request.post('login/access-token', formatCredentials(credentials.user, credentials.pass) )
           .then((response) => {
-            window.localStorage.setItem('username', credentials.user);
+            commit('updateUsername', credentials.user);
+            //window.localStorage.setItem('username', credentials.user);
             window.localStorage.setItem('token', 'Bearer '+response.data.access_token);
             router.push({ path: `/main/`})
           })

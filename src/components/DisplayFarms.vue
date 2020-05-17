@@ -12,6 +12,8 @@
       }"
       :wkt="mapLayers" />
 
+    <FarmInfo/>
+    <!--
       <div class='card'>
         <div class='card-body'>
           <h4 class='card-title'>Areas displayed:</h4>
@@ -22,7 +24,7 @@
           </p>
         </div>
       </div>
-
+    -->
     </div>
   </div>
 </template>
@@ -30,10 +32,12 @@
 <script>
 import { mapState } from 'vuex';
 import Map from '@/components/Map';
+import FarmInfo from '@/components/FarmInfo';
 export default {
   name: 'Display_Farms',
   components: {
-    Map
+    Map,
+    FarmInfo,
   },
   data() {
     return {
@@ -46,26 +50,22 @@ export default {
     mapLayers() {
       /*
        TODO:
-       - Test with additional aggregated farms
-       - Display farm info on mouseover
-       - Route to farm metrics on click
+       - Route to farm info / metrics on click
       */
       return Object.keys(this.farms).map(farm => {
-        return (this.farms[farm] && this.farms[farm].areas)
-          ? this.farms[farm].areas.map(i => {
-            return i.name.includes("Centroid")
-              ? {
-                title: this.farms[farm].name+' '+i.name,
-                wkt: i.geofield[0].geom,
-                color: 'orange',
-                visible: true,
-                weight: 0,
-                canEdit: false,
-                attribution: this.farms[farm].name+' '+i.name}
-              : null
-            }).filter(x => x)
+        return (this.farms[farm] && this.farms[farm].centroid)
+          ? {
+            title: farm,
+            wkt: this.farms[farm].centroid.geofield[0].geom,
+            color: 'orange',
+            visible: true,
+            weight: 0,
+            canEdit: false,}
+            // params: { ID: farm }}
+            // id: farm}
+            // attribution: this.farms[farm].name+' '+i.name}
           : null
-      }).filter(x => x).flat();
+      }).filter(x => x);
     },
   },
   mounted() {

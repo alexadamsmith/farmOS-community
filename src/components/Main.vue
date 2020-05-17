@@ -1,35 +1,7 @@
 <template>
   <div class="primary">
 
-    <h4>Logged in as: {{ username }}</h4>
-
-    <h4>Centroids of aggregated farms:</h4>
-
-    <!--
-    <select
-    @input="methodSelected = $event.target.value"
-    class="custom-select col-sm-3 ">
-      <option
-        v-for="(method, i) in requestMethods"
-        v-bind:key="i"
-        :value="method">
-        {{ method }}
-      </option>
-    </select>
-    -->
-    <!-- requestMethods.indexOf('method') -->
-    <!-- v-bind:key="`log-${i}-${Math.floor(Math.random() * 1000000)}`" -->
-    <!--
-    <div class="form-item form-group">
-      <button
-        type="button"
-        class="btn btn-success"
-        @click="getFarmInfo()"
-        name="makeTestRequest">
-        Get Farm Info!
-      </button>
-    </div>
-    -->
+    <h4>Click on the farms below to see information:</h4>
 
     <div v-if="this.response === 'farms/areas/'">
       <DisplayFarms/>
