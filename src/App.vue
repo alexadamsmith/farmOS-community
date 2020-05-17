@@ -28,7 +28,8 @@ export default {
     ]),
   },
   mounted() {
-    if(window.localStorage.getItem('token')) {
+    if(window.localStorage.getItem('token') && window.localStorage.getItem('username')) {
+      this.$store.commit('updateUsername', window.localStorage.getItem('username'));
       this.$router.push({ path: `/main/`})
     } else {
       this.$router.push({ path: `/login/`})

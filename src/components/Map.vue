@@ -50,9 +50,6 @@ export default {
           && (!e.visible || typeof e.visible === 'boolean')
           && typeof e.weight === 'number'
           && typeof e.canEdit === 'boolean'),
-          // && typeof e.params === 'object'),
-          // && typeof e.id === 'number'),
-          // && typeof e.attribution === 'string'),
     },
   },
   computed: mapState({
@@ -61,7 +58,6 @@ export default {
   }),
   mounted() {
     this.map = window.farmOS.map.create(this.id, this.options);
-    console.log(this.map); // eslint-disable-line no-console
 
     //let hasLayers = false; // eslint-disable-line no-unused-vars
     // De-weights layers without geometries
@@ -91,13 +87,13 @@ export default {
     // Add link in popup to farm info view
     var popup = this.map.addPopup(event => { // eslint-disable-line no-unused-vars
       var mapLayer = this.map.map.forEachFeatureAtPixel(event.pixel, function(feature, layer) { return layer; }); // eslint-disable-line no-unused-vars
-      console.log(mapLayer.getProperties()); // eslint-disable-line no-console
-      var farm = this.farms[mapLayer.getProperties().title];
-      // console.log(layer); // eslint-disable-line no-console
-      this.$store.commit('updateFarmSelected', mapLayer.getProperties().title);
-      return '<div><h2>Farm</h2><p>' + farm.name + '</p></div>';
+      if (mapLayer) {
+        var farm = this.farms[mapLayer.getProperties().title];
+        this.$store.commit('updateFarmSelected', mapLayer.getProperties().title);
+        return '<div><h4>'+farm.name+'</h4></div>';
+      }
     })
-    /*
+    /* Can do something whenever a popup is displayed
     popup.on('farmOS-map.popup', function (event) { // eslint-disable-line no-unused-vars
       console.log(event.target.content.innerText); // eslint-disable-line no-console
     });

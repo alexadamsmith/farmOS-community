@@ -9,7 +9,8 @@
         :overrideStyles="{ height: '60vw' }"
         :drawing="false"
         :options="{
-          controls: (defs) => defs.filter(def => def.constructor.name !== 'FullScreen')
+          controls: (defs) => defs.filter(def => (
+            def.constructor.name !== 'FullScreen' && def.constructor.name !== 'LayerSwitcher'))
         }"
         :wkt="mapLayers" />
 
@@ -37,27 +38,8 @@ export default {
     ...mapState([
       'response',
       'farms',
+      'mapLayers',
     ]),
-    mapLayers() {
-      /*
-       TODO:
-       - Route to farm info / metrics on click
-      */
-      return Object.keys(this.farms).map(farm => {
-        return (this.farms[farm] && this.farms[farm].centroid)
-          ? {
-            title: farm,
-            wkt: this.farms[farm].centroid.geofield[0].geom,
-            color: 'orange',
-            visible: true,
-            weight: 0,
-            canEdit: false,}
-            // params: { ID: farm }}
-            // id: farm}
-            // attribution: this.farms[farm].name+' '+i.name}
-          : null
-      }).filter(x => x);
-    },
   },
   mounted() {
     this.getFarmInfo();
@@ -77,6 +59,27 @@ export default {
       )
     }
   },
+  watch: {
+    response: {
+      handler(newResponse) {
+        if (newResponse === 'farms/areas/'){
+          this.$store.commit('updateMapLayers',
+            Object.keys(this.farms).map(farm => {
+              return (this.farms[farm] && this.farms[farm].centroid)
+                ? {
+                  title: farm,
+                  wkt: this.farms[farm].centroid.geofield[0].geom,
+                  color: 'orange',
+                  visible: true,
+                  weight: 0,
+                  canEdit: false,}
+                : null
+            }).filter(x => x)
+          )
+        }
+      }
+    }
+  }
 }
 </script>
 

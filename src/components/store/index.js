@@ -11,6 +11,7 @@ const store = new Vuex.Store({
   state: {
     username: null,
     response: null,
+    mapLayers: null,
     mapboxAPIKey: null,
     farms: {},
     farmSelected: null,
@@ -21,11 +22,13 @@ const store = new Vuex.Store({
   },
   mutations: {
     updateUsername(state, user) {
-      console.log(user); // eslint-disable-line no-console
       state.username = user;
     },
     updateResponse(state, response) {
       state.response = response;
+    },
+    updateMapLayers(state, layers) {
+      state.mapLayers = layers;
     },
     updateFarms(state, farms) {
       state.farms = farms;
@@ -38,7 +41,6 @@ const store = new Vuex.Store({
         : null
     },
     updateFarmSelected(state, farm) {
-      console.log(farm); // eslint-disable-line no-console
       state.farmSelected = farm;
     }
   },

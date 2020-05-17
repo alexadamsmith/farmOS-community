@@ -4,11 +4,18 @@
       <div class='card'>
         <div class='card-body'>
           <h4 class='card-title'>{{ title }}</h4>
+          <p v-if="areasText">{{ areasText }}</p>
+          <a
+            v-if='url'
+            href='url'
+            >{{ url }}</a>
+          <!--
           <p
             v-for='(line, i) in this.getFarmInfo()'
             v-bind:key='i'>
             {{ line }}
           </p>
+        -->
         </div>
       </div>
 
@@ -25,6 +32,8 @@ export default {
   data() {
     return {
       title: 'Click on a farm below to see info!',
+      areasText: null,
+      url: null,
   }},
   computed: {
     ...mapState([
@@ -34,17 +43,17 @@ export default {
     ]),
   },
   mounted() {
-
   },
   methods: {
-    getFarmInfo() {
-      if (this.farms[this.farmSelected]) {
-        let farm = this.farms[this.farmSelected]
-        this.title = farm.name
-        return [
-          'Farm '+this.farmSelected,
-          farm.name
-        ]
+  },
+  watch: {
+    farmSelected: {
+      handler(farm) {
+        if (farm) {
+          this.title = this.farms[farm].name;
+          this.areasText = this.farms[farm].areas.length+' areas';
+          this.url = this.farms[farm].url;
+        }
       }
     }
   }
