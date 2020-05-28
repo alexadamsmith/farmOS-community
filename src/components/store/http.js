@@ -24,17 +24,38 @@ export default {
         })
       },
 
-      storeResponse({ commit }, response) {
+      storeResponse({ commit, dispatch }, response) {
         if (response.method === "farms/info/") {
+          /*
+            Response is an object where top-level keys = aggregator farm IDs.
+          */
           commit('updateFarms', response.response);
+          for (const farm in response.response) {
+            if (response.response[farm]) {
+              dispatch('saveFarm', {
+                farm: farm,
+                data: response.response[farm],
+              });
+            }
+          }
         }
+
         if (response.method === "farms/areas/") {
+          /*
+            Response is an object where top-level keys = aggregator farm IDs.
+          */
           for (const farm in response.response) {
             if (response.response[farm].length > 0) {
               commit('updateFarmAreas', {
                 farm: farm,
                 areas: response.response[farm],
               });
+              /* Got to write updateFarm
+              dispatch('updateFarm', {
+                farm: farm,
+                data: {areas: response.response[farm]}
+              });
+              */
             }
           }
         }
